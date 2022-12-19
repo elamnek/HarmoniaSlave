@@ -7,3 +7,7 @@ The Leonardo connects to the Arduino Mega and is used for reading the hall rpm s
 
 https://www.jaycar.com.au/barometric-pressure-sensor-module/p/XC3702
 
+
+Please refer to Wiki for more detailed information:
+https://github.com/elamnek/Harmonia/wiki
+
