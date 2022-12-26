@@ -4,9 +4,11 @@
  Author:	eugene
 
 
+ link to the libraries for the pressure/temp sensor:
+ https://www.arduino.cc/reference/en/libraries/spl06-007/
 
-
-  https://www.arduino.cc/reference/en/libraries/spl06-007/
+link to the pinchangeinterrupt libraries on github
+https://github.com/NicoHood/PinChangeInterrupt
 
 
 */
