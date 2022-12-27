@@ -1,7 +1,7 @@
 /*
  Name:		HarmoniaSlave
  Created:	12/18/2022 7:09:49 PM
- Author:	eugene
+ Author:	eugene lamnek
 
 
  link to the libraries for the pressure/temp sensor:
@@ -67,13 +67,14 @@ void loop() {
 	intTimeold = millis();
 	intRevolutions = 0;
 	
-	//send latest data to the mega
+	//send latest data to the mega (format RPM,pressure,temp)
 	serialToMega.print(String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()));
 	
 	//1 second pause - ensure that data is send roughly every second
 	delay(1000);
 
-	Serial.println(intRPM);
+	//display revolutions in debug mode - this is a good indicator of a working/not working sensor
+	Serial.println(String(intRevolutions) + "," + String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()));
 }
 
 
