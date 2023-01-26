@@ -4,8 +4,11 @@
  Author:	eugene lamnek
 
 
- link to the libraries for the pressure/temp sensor:
+link to the libraries for the jaycar pressure/temp sensor:
  https://www.arduino.cc/reference/en/libraries/spl06-007/
+
+link to the libraries for the adsafruit pressure sensor:
+
 
 link to the pinchangeinterrupt libraries on github
 https://github.com/NicoHood/PinChangeInterrupt
@@ -14,6 +17,7 @@ https://github.com/NicoHood/PinChangeInterrupt
 */
 
 
+#include <Adafruit_MPRLS.h>
 #include <PinChangeInterrupt.h>
 #include <PinChangeInterruptBoards.h>
 #include <PinChangeInterruptPins.h>
@@ -31,11 +35,24 @@ unsigned int intRevolutions;
 unsigned int intRPM;
 unsigned int intTimeold;
 
+//pressure sensor for closed loop with air bag
+Adafruit_MPRLS mpr = Adafruit_MPRLS(-1, -1);
+
 void setup() {
 	Wire.begin();    // begin Wire(I2C)
 	Serial.begin(9600); // begin Serial
 	
 	serialToMega.begin(9600);
+
+	//init air bag pressure sensor
+	if (!mpr.begin()) {
+		Serial.println("Failed to communicate with MPRLS sensor, check wiring?");
+		while (1) {
+			delay(10);
+		}
+	}
+	Serial.println("Found MPRLS sensor");
+
 
 	//initialise the pressure/temp sensor using the default address
 	SPL_init(); // Setup initial SPL chip registers - default i2c address 0x76  
