@@ -7,10 +7,10 @@
 link to the libraries for the jaycar pressure/temp sensor:
  https://www.arduino.cc/reference/en/libraries/spl06-007/
 
-link to the libraries for the adsafruit pressure sensor:
+link to the libraries for the adafruit pressure sensor:
+https://github.com/adafruit/Adafruit_MPRLS
 
-
-link to the pinchangeinterrupt libraries on github
+link to the pinchangeinterrupt libraries on github (used for hall effect RPM sensor)
 https://github.com/NicoHood/PinChangeInterrupt
 
 
@@ -83,15 +83,18 @@ void loop() {
 	//reset values
 	intTimeold = millis();
 	intRevolutions = 0;
+
+	float pressure_hPa = mpr.readPressure();
+	float pressure_PSI = pressure_hPa / 68.947572932;
 	
 	//send latest data to the mega (format RPM,pressure,temp)
-	serialToMega.print(String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()));
-	
-	//1 second pause - ensure that data is send roughly every second
-	delay(1000);
+	serialToMega.print(String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_PSI));
+
+	//0.5 second pause - ensure that data is send roughly every half a second
+	delay(500);
 
 	//display revolutions in debug mode - this is a good indicator of a working/not working sensor
-	Serial.println(String(intRevolutions) + "," + String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()));
+	Serial.println(String(intRevolutions) + "," + String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_PSI));
 }
 
 
