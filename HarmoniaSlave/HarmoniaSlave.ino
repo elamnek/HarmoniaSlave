@@ -88,15 +88,15 @@ void loop() {
 	float pressure_PSI = pressure_hPa / 68.947572932;
 	
 	//send latest data to the mega (format RPM,pressure,temp)
-	serialToMega.print(String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_PSI));
+	serialToMega.print(String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa));
 
 	//display revolutions in debug mode - this is a good indicator of a working/not working sensor
 	//NOTE IF TESTING IN DEBUG MODE ON LEANARDO - RESULTS COMING THROUGH TO REMOTE MIGHT GET CORRUPTED!!
-	//CORRECT RESULTS APPEAR IN REMOTE FORM WHEN LEANOARDO IS POWERE BY SUB POWER AND NOT IN DEBUG MODE
-	Serial.println(String(intRevolutions) + "," + String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_PSI));
+	//CORRECT RESULTS APPEAR IN REMOTE FORM WHEN LEANOARDO IS POWERED BY SUB POWER AND NOT IN DEBUG MODE
+	Serial.println(String(intRevolutions) + "," + String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa));
 
 	//0.5 second pause - ensure that data is send roughly every half a second
-	delay(1000);
+	delay(500);
 
 }
 
