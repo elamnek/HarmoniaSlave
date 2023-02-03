@@ -37,6 +37,7 @@ unsigned int intTimeold;
 
 //pressure sensor for closed loop with air bag
 Adafruit_MPRLS mpr = Adafruit_MPRLS(-1, -1);
+boolean blnMPR_OK = false;
 
 void setup() {
 	Wire.begin();    // begin Wire(I2C)
@@ -47,11 +48,16 @@ void setup() {
 	//init air bag pressure sensor
 	if (!mpr.begin()) {
 		Serial.println("Failed to communicate with MPRLS sensor, check wiring?");
-		while (1) {
+		
+		/*while (1) {
 			delay(10);
-		}
+		}*/
 	}
-	Serial.println("Found MPRLS sensor");
+	else {
+		blnMPR_OK = true;
+		Serial.println("Found MPRLS sensor");
+	}
+	
 
 
 	//initialise the pressure/temp sensor using the default address
@@ -84,8 +90,13 @@ void loop() {
 	intTimeold = millis();
 	intRevolutions = 0;
 
-	float pressure_hPa = mpr.readPressure();
-	float pressure_PSI = pressure_hPa / 68.947572932;
+	float pressure_hPa = -1;
+	float pressure_PSI = -1;
+	if (blnMPR_OK) {
+		pressure_hPa = mpr.readPressure();
+		pressure_PSI = pressure_hPa / 68.947572932;
+	}
+	
 	
 	//send latest data to the mega (format RPM,pressure,temp)
 	serialToMega.print(String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa));
