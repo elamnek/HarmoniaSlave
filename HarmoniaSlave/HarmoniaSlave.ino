@@ -17,6 +17,7 @@ https://github.com/NicoHood/PinChangeInterrupt
 */
 
 
+#include <DFRobot_INA219.h>
 #include <Adafruit_MPRLS.h>
 #include <PinChangeInterrupt.h>
 #include <PinChangeInterruptBoards.h>
@@ -39,12 +40,32 @@ unsigned int intTimeold;
 Adafruit_MPRLS mpr = Adafruit_MPRLS(-1, -1);
 boolean blnMPR_OK = false;
 
+
+DFRobot_INA219_IIC ina219(&Wire, INA219_I2C_ADDRESS4);
+// Revise the following two paramters according to actual reading of the INA219 and the multimeter
+// for linearly calibration
+float ina219Reading_mA = 1000;
+float extMeterReading_mA = 1000;
+boolean blnIna219_OK = false;
+
 void setup() {
 	Wire.begin();    // begin Wire(I2C)
 	Serial.begin(9600); // begin Serial
 	
 	serialToMega.begin(9600);
 
+	//allow sensors to initialise
+	delay(2000);
+
+	//init power sesnor
+	if (!ina219.begin()) {
+		Serial.println("ina219 power sensor failed to initialise");
+	}
+	else {
+		blnIna219_OK = true;
+		ina219.linearCalibrate(ina219Reading_mA, extMeterReading_mA);
+	}
+	
 	//init air bag pressure sensor
 	if (!mpr.begin()) {
 		Serial.println("Failed to communicate with MPRLS sensor, check wiring?");
@@ -58,7 +79,6 @@ void setup() {
 		Serial.println("Found MPRLS sensor");
 	}
 	
-
 
 	//initialise the pressure/temp sensor using the default address
 	SPL_init(); // Setup initial SPL chip registers - default i2c address 0x76  
@@ -96,15 +116,27 @@ void loop() {
 		pressure_hPa = mpr.readPressure();
 		pressure_PSI = pressure_hPa / 68.947572932;
 	}
+
+	float bus_voltage = -1;
+	float shunt_voltage = -1;
+	float current = -1;
+	float power = -1;
+	if (blnIna219_OK) {
+		bus_voltage = ina219.getBusVoltage_V();
+		shunt_voltage = ina219.getShuntVoltage_mV();
+		current = ina219.getCurrent_mA();
+		power = ina219.getPower_mW();
+	}
+	String strPower = String(bus_voltage) + "," + String(shunt_voltage) + "," + String(current) + "," + String(power);
 	
 	
 	//send latest data to the mega (format RPM,pressure,temp)
-	serialToMega.print(String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa));
+	serialToMega.print(String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa) + "," + strPower);
 
 	//display revolutions in debug mode - this is a good indicator of a working/not working sensor
 	//NOTE IF TESTING IN DEBUG MODE ON LEANARDO - RESULTS COMING THROUGH TO REMOTE MIGHT GET CORRUPTED!!
 	//CORRECT RESULTS APPEAR IN REMOTE FORM WHEN LEANOARDO IS POWERED BY SUB POWER AND NOT IN DEBUG MODE
-	Serial.println(String(intRevolutions) + "," + String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa));
+	Serial.println(String(intRevolutions) + "," + String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa) + "," + strPower);
 
 	//0.5 second pause - ensure that data is send roughly every half a second
 	delay(500);
