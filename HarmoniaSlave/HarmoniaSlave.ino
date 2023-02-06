@@ -127,19 +127,21 @@ void loop() {
 		current = ina219.getCurrent_mA();
 		power = ina219.getPower_mW();
 	}
-	String strPower = String(bus_voltage) + "," + String(shunt_voltage) + "," + String(current) + "," + String(power);
+	String strData = String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa) + "," + String(bus_voltage) + "," + String(shunt_voltage) + "," + String(current) + "," + String(power);
 	
 	
 	//send latest data to the mega (format RPM,pressure,temp)
-	serialToMega.print(String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa) + "," + strPower);
+	serialToMega.print(strData);
+	
+	//Serial.println(strData);
 
 	//display revolutions in debug mode - this is a good indicator of a working/not working sensor
 	//NOTE IF TESTING IN DEBUG MODE ON LEANARDO - RESULTS COMING THROUGH TO REMOTE MIGHT GET CORRUPTED!!
 	//CORRECT RESULTS APPEAR IN REMOTE FORM WHEN LEANOARDO IS POWERED BY SUB POWER AND NOT IN DEBUG MODE
-	Serial.println(String(intRevolutions) + "," + String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa) + "," + strPower);
+	//Serial.println(String(intRevolutions) + "," + String(intRPM) + "," + String(get_pressure()) + "," + String(get_temp_c()) + "," + String(pressure_hPa) + "," + strPower);
 
 	//0.5 second pause - ensure that data is send roughly every half a second
-	delay(500);
+	delay(1000);
 
 }
 
