@@ -17,7 +17,7 @@ https://core-electronics.com.au/adafruit-mprls-ported-pressure-sensor-breakout-0
 and a power sensor:
 https://core-electronics.com.au/gravity-i2c-digital-wattmeter.html
 
-The slave microcontroller collects sensor data from the above sensors which are all located in the aft pressure hull section, and provides them to them main micorcontroller at 0.5Hz via serial (as a comma separated text string)
+The slave microcontroller collects sensor data from the above sensors which are all located in the aft pressure hull section, and provides them to them main micorcontroller at 2Hz via serial (as a comma separated text string)
 
 Please refer to Wiki for more detailed information:
 https://github.com/elamnek/Harmonia/wiki
