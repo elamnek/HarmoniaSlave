@@ -11,6 +11,9 @@ a hall effect rpm sensor:
 an internal pressure sensor:
 https://www.jaycar.com.au/barometric-pressure-sensor-module/p/XC3702
 
+a pressure sensor connected to the air-bag:
+https://core-electronics.com.au/adafruit-mprls-ported-pressure-sensor-breakout-0-to-25-psi.html
+
 and a power sensor:
 https://core-electronics.com.au/gravity-i2c-digital-wattmeter.html
 
