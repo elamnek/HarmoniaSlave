@@ -15,11 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="HarmoniaSlave.ino" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="__vm\.HarmoniaSlave.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="HarmoniaSlave.ino" />
   </ItemGroup>
 </Project>
